@@ -1,0 +1,52 @@
+
+
+<main role="main">
+  <div class="text-white " *ngIf="productList">
+    <ngb-carousel interval="2000">
+      <ng-template ngbSlide *ngFor="let product of productList.slice(0,3)">
+        <div class="picsum-img-wrapper">
+          <a [routerLink]="'/product/' + product.id">
+            <img [src]="product.urlFile" width="100%" height="650" alt="Random first slide">
+          </a>
+        </div>
+        <div class="carousel-caption">
+          <h2  style="color: lightskyblue"><strong>{{product.name}}</strong></h2>
+        </div>
+      </ng-template>
+    </ngb-carousel>
+  </div>
+  <hr>
+
+
+
+  <input [(ngModel)]="name" (keyup)="searchProduct()" class="form-control form-control-danger w-50" type="text" placeholder="Search by name" aria-label="Search">
+  <br/>
+  <select [(ngModel)]="lineId" id="ilceler" class="form-control" (change)="searchProduct()">
+    <option selected disabled hidden value="null">Select line</option>
+    <option *ngFor="let line of listLine" value="{{line.id}}">{{line.name}}</option>
+  </select>
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <div class="row" *ngIf="listProduct">
+        <div class="col-md-4" *ngFor="let product of listProduct | paginate: { itemsPerPage: 6, currentPage: p}">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" src="{{product.urlFile}}" style="width: 100% ; height: 225px" alt="Card image cap">
+            <div class="card-body">
+              <p class="card-text">{{product.name.slice(0,65)}}...</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" [routerLink]="'/product/' + product.id">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" *ngIf="this.role == 'ADMIN'" [routerLink]="'/update-product/' + product.id">Edit</button>
+                </div>
+                <small class="text-muted">{{product.price}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <pagination-controls  class="text-center" (pageChange)="p = $event" ></pagination-controls>
+
+</main>
